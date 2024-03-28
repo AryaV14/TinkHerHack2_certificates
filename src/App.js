@@ -124,13 +124,15 @@ class App extends Component {
               </option>
             ))}
           </select>
-          <button onClick={this.fetchTeamData}>Preview</button>
-          <button onClick={this.downloadAllCertificates}>Download All</button>
+          <div className="btn">
+            <button onClick={this.fetchTeamData}>Preview</button>
+            <button onClick={this.downloadAllCertificates}>Download All</button>
+          </div>
         </div>
 
         {/* Render certificates for preview */}
         {this.state.teamMembers.length > 0 && (
-          <div>
+          <div className="preview">
             <h3>Certificates Preview</h3>
             {this.state.teamMembers.map((member, index) => (
               <div key={index} id="certificateWrapper" ref={this.certificateWrapper}>
@@ -143,7 +145,7 @@ class App extends Component {
 
         {/* Display message if no team members */}
         {this.state.teamMembers.length === 0 && (
-          <div>No team members to display.</div>
+          <div className="nothing">No team members to display.</div>
         )}
       </div>
     );
