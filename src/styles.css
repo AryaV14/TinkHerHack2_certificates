@@ -2,57 +2,81 @@
     box-sizing: border-box;
   }
   .App {
-    font-family: "Hachi Maru Pop", cursive;
+    align-items: center;
+    text-align: center;
+    font-family: "Domine", serif;
+    font-optical-sizing: auto;
     display: flex;
     flex-direction: column;
     padding: 15px;
   }
   .App .Meta {
+    width: 40%;
     flex-grow: 1;
     padding-right: 15px;
   }
+  .App .Meta p{
+    font-family: "Rubik", sans-serif;
+    text-align: left;
+    color: #3e3e3e;
+    margin-top: 20px;
+    margin-bottom: 5px;
+  }
+  .App .Meta Select{
+    padding: 5px;
+  }
+  
   .App .Meta input {
     font-family: inherit;
-    padding: 5px;
+    padding: 8px;
     width: 100%;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
-    border: 2px solid rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+    border: 2px solid rgba(0, 0, 0, 0.15);
     border-radius: 5px;
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
   }
   .App .Meta button {
     padding: 10px 15px;
-    border: 2px solid #87ceeb;
-    background-color: #33f3fb;
+    border: 2px solid #ca5f1d;
+    background-color: #e06e27;
+    color: azure;
     font-family: inherit;
-    margin: 20px 0;
-    border-radius: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
     cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
   }
   .App #downloadWrapper {
     padding: 20px;
   }
   .App #certificateWrapper {
-    box-shadow: 0 0 5px #000;
-    border-radius: 10px;
+    box-shadow: 0 0px 3px #232323;
+    border-radius: 5px;
     overflow: hidden;
     position: relative;
-   
+    font-family: "Rubik", sans-serif;
   }
   .App #certificateWrapper img {
     display: block;
-    max-width: 1000px;
-    min-width: 500px;
+    width: 60vw;
+    
+    /* padding-top: 56.25%; */
+    /* min-width: 500px; */
     /* display: none; */
   }
   .App #certificateWrapper p {
     width: 100%;
-    font-family: "Staatliches", cursive;
+    font-family: "Domine", serif;
     margin: 0;
     position: absolute;
     text-align: center;
     /* left: 30%; */
-    top: 370px;
-    font-size: 40pt;
+    top: 43%;
+    font-size: 3vw;
   }
 
   

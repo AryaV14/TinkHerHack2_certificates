@@ -5,8 +5,9 @@ import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 
 const certificateOptions = [
-  { label: "Certificate 1", value: "certificate1.jpeg" },
-  { label: "Certificate 2", value: "certificate2.jpeg" },
+  { label: "None", value: "" },
+  { label: "Certificate 1", value: "certificate1.png" },
+  { label: "Certificate 2", value: "certificate2.png" },
   // Add more certificates here as needed
 ];
 
@@ -104,6 +105,7 @@ class App extends Component {
             value={this.state.teamName}
             onChange={this.handleInputChange}
           />
+          <p>Email ID</p>
           <input
             type="text"
             name="teamLeadEmail"
@@ -111,6 +113,7 @@ class App extends Component {
             value={this.state.teamLeadEmail}
             onChange={this.handleInputChange}
           />
+          <p>Choose your venue</p>
           <select
             value={this.state.selectedCertificate}
             onChange={(e) => this.setState({ selectedCertificate: e.target.value })}
@@ -121,7 +124,7 @@ class App extends Component {
               </option>
             ))}
           </select>
-          <button onClick={this.fetchTeamData}>Fetch Team Data</button>
+          <button onClick={this.fetchTeamData}>Preview</button>
           <button onClick={this.downloadAllCertificates}>Download All</button>
         </div>
 
