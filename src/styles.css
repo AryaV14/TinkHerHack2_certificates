@@ -11,6 +11,7 @@
 
   }
   .App .header{
+    text-decoration: none;
     width: 100%;
     padding-left: 80px;
     padding-right: 80px;
@@ -22,7 +23,10 @@
     background-color: #f7f6f5;
     color: #2f1201;
   }
-
+  .App .header a{
+    text-decoration: none;
+    color: #2f1201;
+  }
   .App .header button{
     padding: 10px 15px;
     border: 2px solid #ca5f1d;
@@ -43,6 +47,7 @@
   }
   
   .App .Meta {
+    padding-top: 5%;
     width: 40%;
     flex-grow: 1;
     padding-right: 15px;
@@ -83,7 +88,8 @@
     justify-content: space-between;
     width: 100%;
   }
-  .App .Meta button {
+  .App .Meta button,
+  .App .preview button {
     
     padding: 10px 15px;
     border: 2px solid #ca5f1d;
@@ -97,7 +103,8 @@
     font-style: normal;
     transition: background-color 0.3s, color 0.3s; 
   }
-  .App .Meta button:hover {
+  .App .Meta button:hover,
+  .App .preview button:hover {
     border: 2px solid #242424;
     background-color: black;
     color: white;

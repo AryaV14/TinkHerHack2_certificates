@@ -3,6 +3,7 @@ import * as XLSX from "xlsx";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
+import PreviewPage from "./PreviewPage";
 
 const certificateOptions = [
   { label: "None", value: "" },
@@ -44,6 +45,7 @@ class App extends Component {
     teamLeadEmail: "",
     selectedCertificate: "",
     teamMembers: [],
+    previewMode: false,
   };
 
   handleInputChange = (event) => {
@@ -76,13 +78,13 @@ class App extends Component {
           const members = teamInfo["Team Members"];
           if (members) {
             const memberList = members.split(",");
-            this.setState({ teamMembers: memberList });
+            this.setState({ teamMembers: memberList, previewMode: true });
           } else {
-            this.setState({ teamMembers: [] });
+            this.setState({ teamMembers: [], previewMode: false });
             alert("No members found for the given team.");
           }
         } else {
-          this.setState({ teamMembers: [] });
+          this.setState({ teamMembers: [], previewMode: false });
           alert("Team not found for the given Team Name and Team Lead Email.");
         }
       };
@@ -118,20 +120,31 @@ class App extends Component {
   };
 
   render() {
+    const { teamMembers, selectedCertificate, previewMode } = this.state;
+
+    if (previewMode) {
+      return (
+        <PreviewPage
+          teamMembers={teamMembers}
+          selectedCertificate={selectedCertificate}
+          downloadAllCertificates={this.downloadAllCertificates}
+        />
+      );
+    }
+
     return (
-      
       <div className="App">
-         <div className="header">
-            <h1>Tink-Her-Hack 2.0</h1> 
-            <button
+        <div className="header">
+          <h1>Tink-Her-Hack 2.0</h1>
+          <button
             onClick={() => {
               window.open("https://your-form-link-here", "_blank");
-            }}>
+            }}
+          >
             Contact Us
           </button>
-          </div>
+        </div>
         <div className="Meta">
-       
           <h2>Certificates</h2>
           <p>Team lead</p>
           <input
@@ -162,27 +175,8 @@ class App extends Component {
           </select>
           <div className="btn">
             <button onClick={this.fetchTeamData}>Preview</button>
-            <button onClick={this.downloadAllCertificates}>Download All</button>
           </div>
         </div>
-
-        {/* Render certificates for preview */}
-        {this.state.teamMembers.length > 0 && (
-          <div className="preview">
-            <h3>Certificates Preview</h3>
-            {this.state.teamMembers.map((member, index) => (
-              <div key={index} id="certificateWrapper" ref={this.certificateWrapper}>
-                <p>{member}</p>
-                <img src={`./${this.state.selectedCertificate}`} alt="Certificate" />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Display message if no team members */}
-        {this.state.teamMembers.length === 0 && (
-          <div className="nothing">No team members to display.</div>
-        )}
       </div>
     );
   }
