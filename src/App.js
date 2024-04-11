@@ -119,9 +119,19 @@ class App extends Component {
 
   render() {
     return (
+      
       <div className="App">
+         <div className="header">
+            <h1>Tink-Her-Hack 2.0</h1> 
+            <button
+            onClick={() => {
+              window.open("https://your-form-link-here", "_blank");
+            }}>
+            Contact Us
+          </button>
+          </div>
         <div className="Meta">
-          <h1>Tink-Her-Hack 2.0</h1>
+       
           <h2>Certificates</h2>
           <p>Team lead</p>
           <input

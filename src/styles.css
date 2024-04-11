@@ -4,17 +4,50 @@
   .App {
     align-items: center;
     text-align: center;
-    font-family: "Domine", serif;
+    font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     display: flex;
     flex-direction: column;
-    padding: 15px;
+
   }
+  .App .header{
+    width: 100%;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    background-color: #f7f6f5;
+    color: #ca5f1d;
+  }
+
+  .App .header button{
+    padding: 10px 15px;
+    border: 2px solid #ca5f1d;
+    background-color: #e06e27;
+    color: azure;
+    font-family: inherit;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: "Rubik", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    transition: background-color 0.3s, color 0.3s; 
+  }
+  .App .header button:hover {
+    border: 2px solid #242424;
+    background-color: black;
+    color: white;
+  }
+  
   .App .Meta {
     width: 40%;
     flex-grow: 1;
     padding-right: 15px;
   }
+  
   .App .Meta p{
     font-family: "Rubik", sans-serif;
     text-align: left;
