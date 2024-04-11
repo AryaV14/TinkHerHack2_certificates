@@ -56,7 +56,7 @@ class App extends Component {
     const { teamName, teamLeadEmail } = this.state;
 
     try {
-      const response = await fetch(`/tink.xlsx`);
+      const response = await fetch(`/Participants.xlsx`);
       const blob = await response.blob();
       const reader = new FileReader();
 
@@ -69,11 +69,11 @@ class App extends Component {
 
         // Assuming Excel structure: [Team Name, Team Lead Email, Members]
         const teamInfo = excelData.find(
-          (row) => row["TeamName"] === teamName && row["TeamLeadEmail"] === teamLeadEmail
+          (row) => row["Team Name"] === teamName && row["Team Lead Email"] === teamLeadEmail
         );
         
         if (teamInfo) {
-          const members = teamInfo["Members"];
+          const members = teamInfo["Team Members"];
           if (members) {
             const memberList = members.split(",");
             this.setState({ teamMembers: memberList });
