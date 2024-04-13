@@ -146,7 +146,7 @@ class App extends Component {
         </div>
         <div className="Meta">
           <h2>Certificates</h2>
-          <p>Team lead</p>
+          <p>Team Name</p>
           <input
             type="text"
             name="teamName"

@@ -8,7 +8,7 @@ const PreviewPage = ({ teamMembers, selectedCertificate, downloadAllCertificates
         <a href="App.js"><h1>Tink-Her-Hack 2.0</h1></a>
         <button
           onClick={() => {
-            window.open("https://your-form-link-here", "_blank");
+            window.open("https://docs.google.com/forms/d/e/1FAIpQLSfeC5tT6BmKwAo_W_vwhZcMjf3L-pjb8fV3EJCaW-DmA849EQ/viewform", "_blank");
           }}
         >
           Contact Us
