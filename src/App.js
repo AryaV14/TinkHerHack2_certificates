@@ -1,9 +1,14 @@
 import React, { Component } from "react";
-import * as XLSX from "xlsx";
+// import * as XLSX from "xlsx";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 import PreviewPage from "./PreviewPage";
+import { db } from "./firebaseConfig"
+// import { collection, onSnapshot, orderBy, query } from "firebase/firestore" ;
+import { collection, query, where, getDocs } from "firebase/firestore";
+
+
 
 const certificateOptions = [
   { label: "None", value: "" },
@@ -48,52 +53,49 @@ class App extends Component {
     previewMode: false,
   };
 
-  handleInputChange = (event) => {
+handleInputChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
   };
 
+
+
   fetchTeamData = async () => {
     const { teamName, teamLeadEmail } = this.state;
 
     try {
-      const response = await fetch(`/Participants.xlsx`);
-      const blob = await response.blob();
-      const reader = new FileReader();
+        const q = query(collection(db, "Participants"), where("Team Name", "==", teamName), where("Team Lead Email", "==", teamLeadEmail));
+        const querySnapshot = await getDocs(q);
 
-      reader.onload = (e) => {
-        const binaryStr = e.target.result;
-        const workbook = XLSX.read(binaryStr, { type: 'binary' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const excelData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-
-        // Assuming Excel structure: [Team Name, Team Lead Email, Members]
-        const teamInfo = excelData.find(
-          (row) => row["Team Name"] === teamName && row["Team Lead Email"] === teamLeadEmail
-        );
-        
-        if (teamInfo) {
-          const members = teamInfo["Team Members"];
-          if (members) {
-            const memberList = members.split(",");
-            this.setState({ teamMembers: memberList, previewMode: true });
-          } else {
-            this.setState({ teamMembers: [], previewMode: false });
-            alert("No members found for the given team.");
-          }
-        } else {
-          this.setState({ teamMembers: [], previewMode: false });
-          alert("Team not found for the given Team Name and Team Lead Email.");
+        if (querySnapshot.empty) {
+            alert("Team not found for the given Team Name and Team Lead Email.");
+            return;
         }
-      };
 
-      reader.readAsBinaryString(blob);
+        const teamMembers = [];
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+            const data = doc.data();
+            // Split the team members string by commas
+            const members = data["Team Members"].split(",");
+            teamMembers.push(...members);
+        });
+
+        if (teamMembers.length > 0) {
+            this.setState({ teamMembers: teamMembers, previewMode: true });
+            console.log(teamMembers);
+        } else {
+            alert("No members found for the given team.");
+            this.setState({ teamMembers: [], previewMode: false });
+        }
+     
     } catch (error) {
-      console.error("Error fetching team data:", error);
+        console.error("Error fetching team data:", error);
     }
   };
+
+
 
   downloadAllCertificates = async () => {
     const zip = new JSZip();
