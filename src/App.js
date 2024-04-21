@@ -62,38 +62,47 @@ handleInputChange = (event) => {
 
 
   fetchTeamData = async () => {
-    const { teamName, teamLeadEmail } = this.state;
+    let { teamName, teamLeadEmail } = this.state;
+    
+    // Convert teamName to lowercase (or uppercase)
+    teamName = teamName.toLowerCase(); // or teamName.toUpperCase();
 
     try {
-        const q = query(collection(db, "Participants"), where("Team Name", "==", teamName), where("Team Lead Email", "==", teamLeadEmail));
+        const q = query(collection(db, "Participants"), where("Team Lead Email", "==", teamLeadEmail));
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-            alert("Team not found for the given Team Name and Team Lead Email.");
+            alert("Team not found for the given Team Lead Email.");
             return;
         }
 
+        let found = false;
         const teamMembers = [];
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
             const data = doc.data();
-            // Split the team members string by commas
-            const members = data["Team Members"].split(",");
-            teamMembers.push(...members);
+            // Convert data["Team Name"] to lowercase (or uppercase)
+            const firebaseTeamName = data["Team Name"].toLowerCase(); // or data["Team Name"].toUpperCase();
+            if (firebaseTeamName === teamName) {
+                found = true;
+                // Split the team members string by commas
+                const members = data["Team Members"].split(",");
+                teamMembers.push(...members);
+            }
         });
 
-        if (teamMembers.length > 0) {
+        if (found) {
             this.setState({ teamMembers: teamMembers, previewMode: true });
             console.log(teamMembers);
         } else {
-            alert("No members found for the given team.");
+            alert("Team not found for the given Team Name and Team Lead Email.");
             this.setState({ teamMembers: [], previewMode: false });
         }
      
     } catch (error) {
         console.error("Error fetching team data:", error);
     }
-  };
+};
+
 
 
 
