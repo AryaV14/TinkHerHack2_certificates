@@ -51,14 +51,41 @@ class App extends Component {
     selectedCertificate: "",
     teamMembers: [],
     previewMode: false,
+    filteredTeamNames: []
   };
 
-handleInputChange = (event) => {
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
     this.setState({
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
+
+    // Filter team names based on input value
+    this.filterTeamNames(value);
   };
 
+  filterTeamNames = async (inputValue) => {
+    try {
+      const q = query(collection(db, "Participants"), where("Team Name", ">=", inputValue));
+      const querySnapshot = await getDocs(q);
+  
+      const filteredTeamNames = querySnapshot.docs.map((doc) => doc.data()["Team Name"]);
+  
+      // Convert input value to lowercase (or uppercase)
+      const lowerInputValue = inputValue.toLowerCase(); // or inputValue.toUpperCase()
+  
+      // Filter team names case insensitively
+      const filteredNames = filteredTeamNames.filter(name =>
+        name.toLowerCase().includes(lowerInputValue)
+      );
+  
+      this.setState({ filteredTeamNames: filteredNames });
+    } catch (error) {
+      console.error("Error filtering team names:", error);
+    }
+  };
+  
+  
 
 
   fetchTeamData = async () => {
@@ -133,67 +160,83 @@ downloadAllCertificates = async () => {
   });
 };
 
-  render() {
-    const { teamMembers, selectedCertificate, previewMode } = this.state;
 
-    if (previewMode) {
-      return (
-        <PreviewPage
-          teamMembers={teamMembers}
-          selectedCertificate={selectedCertificate}
-          downloadAllCertificates={this.downloadAllCertificates}
-        />
-      );
-    }
 
+render() {
+  const { selectedCertificate, previewMode, filteredTeamNames } = this.state;
+
+  if (previewMode) {
     return (
-      <div className="App">
-        <div className="header">
-          <h1>Tink-Her-Hack 2.0</h1>
-          <button
-            onClick={() => {
-              window.open("https://docs.google.com/forms/d/e/1FAIpQLSfeC5tT6BmKwAo_W_vwhZcMjf3L-pjb8fV3EJCaW-DmA849EQ/viewform", "_blank");
-            }}
-          >
-            Contact Us
-          </button>
-        </div>
-        <div className="Meta">
-          <h2>Certificates</h2>
-          <p>Team Name</p>
-          <input
-            type="text"
-            name="teamName"
-            placeholder="Please enter team name..."
-            value={this.state.teamName}
-            onChange={this.handleInputChange}
-          />
-          <p>Email ID</p>
-          <input
-            type="text"
-            name="teamLeadEmail"
-            placeholder="Please enter team lead's email..."
-            value={this.state.teamLeadEmail}
-            onChange={this.handleInputChange}
-          />
-          <p>Choose your venue</p>
-          <select
-            value={this.state.selectedCertificate}
-            onChange={(e) => this.setState({ selectedCertificate: e.target.value })}
-          >
-            {certificateOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <div className="btn">
-            <button onClick={this.fetchTeamData}>Preview</button>
-          </div>
-        </div>
-      </div>
+      <PreviewPage
+        teamMembers={this.state.teamMembers}
+        selectedCertificate={selectedCertificate}
+        downloadAllCertificates={this.downloadAllCertificates}
+      />
     );
   }
-}
 
-export default App;
+  return (
+    <div className="App">
+      <div className="header">
+        <h1>Tink-Her-Hack 2.0</h1>
+        <button
+          onClick={() => {
+            window.open("https://docs.google.com/forms/d/e/1FAIpQLSfeC5tT6BmKwAo_W_vwhZcMjf3L-pjb8fV3EJCaW-DmA849EQ/viewform", "_blank");
+          }}
+        >
+          Contact Us
+        </button>
+      </div>
+      <div className="Meta">
+        <h2>Certificates</h2>
+        <p>Team Name</p>
+        <input
+          type="text"
+          name="teamName"
+          placeholder="Please enter team name..."
+          value={this.state.teamName}
+          onChange={this.handleInputChange}
+        />
+        {/* Display filtered team names as a selectable dropdown */}
+        <select
+          size="5"
+          style={{ height: "100px" }}
+          onChange={(e) => this.setState({ teamName: e.target.value })}
+          value={this.state.teamName}
+        >
+          {filteredTeamNames.map((name, index) => (
+            <option key={index} value={name}>
+              {name} {/* Display original case */}
+            </option>
+          ))}
+        </select>
+
+        <p>Email ID</p>
+        <input
+          type="text"
+          name="teamLeadEmail"
+          placeholder="Please enter team lead's email..."
+          value={this.state.teamLeadEmail}
+          onChange={this.handleInputChange}
+        />
+        <p>Choose your venue</p>
+        <select
+          value={selectedCertificate}
+          onChange={(e) => this.setState({ selectedCertificate: e.target.value })}
+        >
+          {certificateOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <div className="btn">
+          <button onClick={this.fetchTeamData}>Preview</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+}
+  
+  export default App;
