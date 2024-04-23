@@ -18,8 +18,10 @@ const PreviewPage = ({ teamMembers, selectedCertificate, downloadAllCertificates
         <h3>Certificates Preview</h3>
         {teamMembers.map((member, index) => (
           <div key={index} id="certificateWrapper">
-            <p>{member}</p>
-            <img src={`./${selectedCertificate}`} alt="Certificate" />
+            <div id={`Wrapper_${index}`}>
+              <p>{member}</p>
+              <img src={`./${selectedCertificate}`} alt="Certificate" />
+            </div>
           </div>
         ))}
         <div className="btn">

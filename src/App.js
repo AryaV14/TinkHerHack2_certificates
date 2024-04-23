@@ -106,29 +106,32 @@ handleInputChange = (event) => {
 
 
 
-  downloadAllCertificates = async () => {
-    const zip = new JSZip();
-    const imgFolder = zip.folder("certificates");
+downloadAllCertificates = async () => {
+  const zip = new JSZip();
+  const imgFolder = zip.folder("certificates");
 
-    // Function to convert div to base64 image
-    const convertDivToImage = async (divId) => {
-      const div = document.getElementById(divId);
-      const canvas = await html2canvas(div);
-      return canvas.toDataURL("image/png");
-    };
-
-    // Loop through team members sequentially and add images to ZIP
-    for (const member of this.state.teamMembers) {
-      const imageData = await convertDivToImage("certificateWrapper");
-      imgFolder.file(`${member}.png`, imageData.split("base64,")[1], { base64: true });
-      console.log(`Added image for ${member}`);
-    }
-
-    // Generate zip file after all images are added
-    zip.generateAsync({ type: "blob" }).then((content) => {
-      saveAs(content, "certificates.zip");
-    });
+  // Function to convert div to base64 image
+  const convertDivToImage = async (divId) => {
+    const div = document.getElementById(divId);
+    const canvas = await html2canvas(div);
+    return canvas.toDataURL("image/png");
   };
+
+  // Loop through team members sequentially and add images to ZIP
+  for (let i = 0; i < this.state.teamMembers.length; i++) {
+    const member = this.state.teamMembers[i];
+    const wrapperId = `Wrapper_${i}`;
+    
+    // Use the wrapper ID specific to each member
+    const imageData = await convertDivToImage(wrapperId);
+    imgFolder.file(`${member}.png`, imageData.split("base64,")[1], { base64: true });
+    console.log(`Added image for ${member}`);
+  }
+  // Generate zip file after all images are added
+  zip.generateAsync({ type: "blob" }).then((content) => {
+    saveAs(content, "certificates.zip");
+  });
+};
 
   render() {
     const { teamMembers, selectedCertificate, previewMode } = this.state;
